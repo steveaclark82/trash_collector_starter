@@ -29,3 +29,25 @@ def index(request):
     return render(request, 'employees/index.html', context)
 
 
+def create(request):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        zip_code = request.POST.get('zip_code')
+        new_employee = Employee(name=name, zip_code=zip_code, user=request.user)
+        new_employee.save()
+        return HttpResponseRedirect(reverse('employees:index'))
+    else:
+        return render(request, 'employees/create.html')
+
+
+def confirm_pickups(request, customer_id):
+    if request.method == 'POST':
+        customers = apps.get_model('customers.Customer')
+        customer = customers.objects.get(id=customer_id)
+        customer.account_balance += 15
+        customer.save()
+        return HttpResponseRedirect(reverse('employees:index'))
+    else:
+        return render(request, 'employees/index.html')
+
+
