@@ -51,3 +51,20 @@ def confirm_pickups(request, customer_id):
         return render(request, 'employees/index.html')
 
 
+def filter_pickups(request):
+    customers = apps.get_model('customers.Customer')
+    employee = Employee.objects.get(user=request.user)
+    employee_customers = customers.objects.filter(zip_code=employee.zip_code)
+    if request.method == 'POST':
+        filtered_customers = customers.objects.filter(zip_code=employee.zip_code).filter(pickup_day=request.POST.get('pickup_day'))
+        context = {
+            'customers': filtered_customers,
+            'employee': employee
+        }
+        return render(request, 'employees/filter_pickups.html', context)
+    else:
+        context = {
+            'customers': employee_customers
+        }
+        return render(request, 'employees/filter_pickups.html', context)
+
