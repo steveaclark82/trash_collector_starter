@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %} Filter Customers {% endblock %}
+
+{% block header %} Filter Customers {% endblock %}
+
+{% block content %}
+<h3>Hello {{ user.username }}!</h3>
+<div class="container text-center">
+  {% for customer in customers %}
+    <p>{{customer.name}} {{customer.address}} {{customer.zip_code}} {{customer.pickup_day}}</p>
+  {% endfor %}
+<div class="container text-center">
+<form action="{% url 'employees:filter_pickups' %}" method="post">
+    {% csrf_token %}
+    <label>Pickup Day:</label>
+    <select name="pickup_day">
+        <option value="Monday">Monday</option>
+        <option value="Tuesday">Tuesday</option>
+        <option value="Wednesday">Wednesday</option>
+        <option value="Thursday">Thursday</option>
+        <option value="Friday">Friday</option>
+        <option value="Saturday">Saturday</option>
+    </select><br>
+    <br>
+    <input type="submit" value="Submit">
+</form>
+</div>
+{% endblock %}
