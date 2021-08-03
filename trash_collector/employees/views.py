@@ -1,6 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.apps import apps
+from .models import Employee
+from datetime import date
+import calendar
+from django.db.models import Q
+from django.urls import reverse
 
 # Create your views here.
 
@@ -10,4 +15,17 @@ from django.apps import apps
 def index(request):
     # This line will get the Customer model from the other app, it can now be used to query the db for Customers
     Customer = apps.get_model('customers.Customer')
-    return render(request, 'employees/index.html')
+    user = request.user
+    try:
+        logged_in_employee = Employee.objects.get(user=user)
+    except:
+        return render(request, 'employee/create.html')
+    employee_customers = customers.objects.filter(Q(zip_code=logged_in_employee.zip_code,
+                                                    pickup_day=calendar.day_name[date.today().weekday()]) | Q(~Q(pickup_day=calendar.day_name[date.today().weekday()]), one_time_pickup=date.today())).exclude(Q((Q(suspension_start__lte=date.today()) & Q(suspension_end__gte=date.today())) & ~Q(one_time_pickup=date.today())))
+    context = {
+        'employee_customers': employee_customers,
+        'logged_in_employee': logged_in_employee
+    }
+    return render(request, 'employees/index.html', context)
+
+
