@@ -1,12 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create one time pickup</title>
-</head>
-<body>
-    Sample
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %} Request a pickup {% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+
+    Hello Customer {{ user.username }}!
+  <p>Would you like a one time pickup?</p>
+  <form action="{% url 'customers:requestapickup'%}" method ="post">
+      {% csrf_token %}
+      <label for="pickup">One time Pickup:</label>
+      <input type="date" id="pickup" name="pickup"
+       value="2021-05-12"
+       min="2021-05-12" max="2050-12-31">
+      <input type="submit" value="Submit">
+  </form>
+  {% else %}
+    <p>You are not currently logged in, Please log in</p>
+    <a href="{% url 'login' %}">Log In</a>
+    <a href="{% url 'accounts:register' %}">Sign Up</a>
+  {% endif %}
+{% endblock %}
