@@ -14,6 +14,7 @@ class Customer(models.Model):
     start_supsension = models.DateField(null=True)
     end_supsension = models.DateField(null=True)
     balance = models.IntegerField(default=0)
+    suspended = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
