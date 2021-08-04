@@ -9,3 +9,6 @@ class Employees(models.Model):
     user = models.ForeignKey('accounts.User', blank=True, null=True, on_delete=models.PROTECT)
     zip_code = models.IntegerField(default=00000, null=True)
     todays_customers = []
+
+    def __str__(self):
+        return self.name
