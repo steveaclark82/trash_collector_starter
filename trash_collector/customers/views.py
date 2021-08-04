@@ -13,82 +13,75 @@ today = today.strftime("%Y-%m-%d")
 
 
 def index(request):
+    # The following line will get the logged-in in user (if there is one) within any view function
     user = request.user
 
-    if not Customer.objects.filter(user_id=user.id).exists():
-            return redirect('create/')
-    else:
-        specific_customer = Customer.objects.get(user_id=user.id)
+    try:
+        # This line inside the 'try' will return the customer record of the logged-in user if one exists
+        logged_in_customer = Customer.objects.get(user=user)
         context = {
-            'user': user,
-            'specific_customer': specific_customer
+            'logged_in_customer': logged_in_customer
         }
-        print(user)
-        return render(request, 'customers/index.html', context)
+        return render(request, 'customer/account.html', context)
+    except:
+        return HttpResponseRedirect(reverse('customer:register'))
+        pass
 
+    # It will be necessary while creating a Customer/Employee to assign request.user as the user foreign key
 
-def create(request):
+    print(user)
+    return render(request, 'customers/index.html')
+
+def account_info(request):
+    user = request.user
+    customer = Customer.objects.get(user=user.id)
+    context = {
+        'customer': customer
+    }
+    return render(request, 'customers/account.html', context)
+
+def onetime_pickup(request):
+    user = request.user
+    customer = Customer.objects.get(user=user.id)
+    if request.method == 'POST':
+        customer.onetime_pickup = request.POST.get('pickup')
+        customer.save()
+        return HttpResponseRedirect(reverse('customers:index'))
+    else:
+        return render(request, 'customers/one_time_pickup.html')
+
+def create_customer(request):
+    user = request.user
     if request.method == 'POST':
         name = request.POST.get('name')
-        weekly_pickup_day = request.POST.get('weekly_pickup_day')
+        pickup_date = request.POST.get('pickup_date')
+        balance = request.POST.get('balance')
+        zipcode = request.POST.get('zipcode')
         address = request.POST.get('address')
-        zip_code = request.POST.get('zip_code')
-        one_time_pickup = request.POST.get('one_time_pickup')
-        new_customer = Customer(
-            user_id=request.user.id,
-            name=name,
-            weekly_pickup_day=weekly_pickup_day,
-            onetime_pickup=one_time_pickup,
-            address=address,
-            zip_code=zip_code,
-        )
+        new_customer = Customer(name=name, pickup_date=pickup_date,
+                                balance=balance, zipcode=zipcode, address=address, user_id=user.id)
         new_customer.save()
         return HttpResponseRedirect(reverse('customers:index'))
     else:
-        return render(request, 'customers/create.html')
+        return render(request, 'customers/register.html')
 
-
-def edit(request, option):
-    specific_option = option
+def suspend_pickup(request):
     user = request.user
-    specific_customer = Customer.objects.get(user_id=user.id)
-    context = {
-        'specific_customer': specific_customer,
-        'specific_option': specific_option
-    }
+    customer = Customer.objects.get(user=user.id)
     if request.method == 'POST':
-        if specific_option == 1:
-            # For Weekly pickup
-            specific_customer.weekly_pickup_day = request.POST.get('weekly_pickup_day')
-            specific_customer.save()
-        elif specific_option == 2:
-            # For Suspended account
-            specific_customer.start_suspension = request.POST.get('start_suspension')
-            specific_customer.end_suspension = request.POST.get('end_suspension')
-            specific_customer.save()
-            start = specific_customer.start_suspension
-            end = specific_customer.end_suspension
-            if end > today:
-                specific_customer.has_suspension = True
-            elif start > today:
-                specific_customer.has_suspension = False
-            elif end == today:
-                specific_customer.has_suspension = False
-            else:
-                specific_customer.has_suspension = False
-
-            specific_customer.save()
-        elif specific_option == 3:
-            # For Onetime pickup
-            specific_customer.onetime_pickup = request.POST.get('onetime_pickup')
-            specific_customer.save()
-        elif specific_option == 4:
-            # For Editing Account Info
-            specific_customer.name = request.POST.get('name')
-            specific_customer.address = request.POST.get('address')
-            specific_customer.zip_code = request.POST.get('zip_code')
-            specific_customer.save()
-
+        customer.start_date = request.POST.get('start')
+        customer.end_date = request.POST.get('end')
+        customer.save()
         return HttpResponseRedirect(reverse('customers:index'))
     else:
-        return render(request, 'customers/edit.html', context)
+        return render(request, 'customers/suspend_pickup.html')
+
+def weekly_pickup(request):
+    user = request.user
+    customer = Customer.objects.get(user=user.id)
+    if request.method == 'POST':
+        customer.pickup_date = request.POST.get('name')
+        customer.save()
+        return HttpResponseRedirect(reverse('customers:index'))
+    else:
+        return render(request, 'customers/weekly_pickup.html')
