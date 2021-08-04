@@ -14,7 +14,7 @@
   <!-- CSS CUSTOM -->
   {% load static %}
   <link rel="stylesheet" href="{% static 'stylesheet.css' %}">
-  <title>{% block title %}{% endblock %}</title>
+  <title>{% block <title></title> %}{% endblock %}</title>
 <body>
 {% if user.is_authenticated %}
     {% for group in user.groups.all%}
