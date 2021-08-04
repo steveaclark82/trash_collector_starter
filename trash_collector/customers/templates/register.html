@@ -8,8 +8,8 @@
 {% block content %}
   {% if user.is_authenticated %}
 
-    Hello Customer {{ user.username }}!<br>
-  <form action="{% url 'customers:registercustomer'%}" method ="post">
+    Hello {{ user.username }}!<br>
+  <form action="{% url 'customers:register'%}" method ="post">
       {% csrf_token %}
       Name:<input type="text" name ="name" id="name"><br>
       Pickup day:<input type="text" name = "pickup_date" id="pickup_date"><br>
