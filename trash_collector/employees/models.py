@@ -7,4 +7,3 @@ from django.db import models
 class Employees(models.Model):
     name = models.CharField(max_length=50, default=("temp"))
     zip_code = models.CharField(max_length=10, null=True)
-    user = models.ForeignKey('account.User', blank=True, null=True, on_delete=models.CASCADE)
