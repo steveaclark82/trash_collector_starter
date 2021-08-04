@@ -3,6 +3,11 @@ from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from .models import Customer
 from django.urls import reverse
+from datetime import date
+
+today = date.today()
+today = today.strftime("%Y-%m-%d")
+
 # Create your views here.
 
 # TODO: Create a function for each path created in customers/urls.py. Each will need a template as well.
