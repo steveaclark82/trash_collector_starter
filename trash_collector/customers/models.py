@@ -6,15 +6,13 @@ from django.db import models
 
 class Customer(models.Model):
     name = models.CharField(max_length=50)
-    user = models.ForeignKey('accounts.User', blank=True, null=True, on_delete=models.CASCADE)
-    address = models.CharField(max_length=100, null=True)
-    zip_code = models.CharField(max_length=5)
-    weekly_pickup_day = models.CharField(max_length=10, null=True)
-    onetime_pickup = models.DateField(null=True)
-    start_supsension = models.DateField(null=True)
-    end_supsension = models.DateField(null=True)
+    user = models.ForeignKey('accounts.User', blank=True, null=True, on_delete=models.PROTECT)
+    weekly_pickup_day = models.CharField(max_length=10, blank=True, null=True)
+    onetime_pickup = models.CharField(max_length=10, blank=True, null=True)
+    start_suspension = models.CharField(max_length=10, blank=True, null=True)
+    end_suspension = models.CharField(max_length=10, blank=True, null=True)
     balance = models.IntegerField(default=0)
-    suspended = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.name
+    zip_code = models.IntegerField(default=00000, null=True)
+    address = models.CharField(max_length=50, blank=True, null=True)
+    has_suspension = models.BooleanField(default=False)
+    last_confirmed_pickup = models.CharField(max_length=10, blank=True, null=True)
