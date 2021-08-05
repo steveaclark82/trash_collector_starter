@@ -4,14 +4,6 @@ from .models import Customer
 from django.urls import reverse
 from datetime import date
 
-today = date.today()
-today = today.strftime("%Y-%m-%d")
-
-# Create your views here.
-
-# TODO: Create a function for each path created in customers/urls.py. Each will need a template as well.
-
-
 def index(request):
     user = request.user
 
@@ -29,6 +21,7 @@ def index(request):
 
 def create(request):
     if request.method == 'POST':
+        user = request.user
         name = request.POST.get('name')
         weekly_pickup_day = request.POST.get('weekly_pickup_day')
         address = request.POST.get('address')
