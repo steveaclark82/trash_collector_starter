@@ -1,28 +1,10 @@
 {% extends 'base.html' %}
 
-<div class="container text-center">
-{% block title %}{% block header %}  {% endblock %}{% endblock %}
-</div>
+{% block title %}{% block header %} Employee Home {% endblock %}{% endblock %}
 
 {% block content %}
   {% if user.is_authenticated %}
-    <h1>Hello {{logged_in_employee.name}}!</h1><h2>(username: {{ user.username }})</h2>
-
-<div class="container text-center">
-    <h1>These are your pick-ups for today!</h1>
-  {% for customer in employee_customers %}
-<div class="container-sm text-center border border-dark w-25 p-3">
-    <p>{{customer.name}} {{customer.address}} {{customer.zip_code}} {{customer.pickup_day}} ${{customer.account_balance}}
-    <div class="form-group">
-<form action="{% url 'employees:confirm_pickups' customer.id %}" method="post">
-    {% csrf_token %}
-    <p>Confirm pickup for {{customer.name}}</p>
-    <input type="submit" value="Confirm">
-</form>
-    </div>
-</div>
-</div>
-  {% endfor %}
+    Hello Employee {{ user.username }}!
   {% else %}
     <p>You are at the employee index, but you are not logged in.</p>
     <a href="{% url 'login' %}">Log In</a>
