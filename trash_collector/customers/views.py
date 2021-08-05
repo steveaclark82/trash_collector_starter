@@ -61,11 +61,11 @@ def edit(request, option):
             specific_customer.save()
             start = specific_customer.start_suspension
             end = specific_customer.end_suspension
-            if end > today:
+            if end > 'today':
                 specific_customer.has_suspension = True
-            elif start > today:
+            elif start > 'today':
                 specific_customer.has_suspension = False
-            elif end == today:
+            elif end == 'today':
                 specific_customer.has_suspension = False
             else:
                 specific_customer.has_suspension = False
