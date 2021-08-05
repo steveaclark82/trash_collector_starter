@@ -102,10 +102,10 @@ def find_customers_by_day(request):
         context = {
             'daily_customers': daily_customers
         }
-        return render(request, 'employees/daily.html', context)
+        return render(request, 'employees/filter_pickups.html', context)
 
     else:
-        return render(request, 'employees/daily.html')
+        return render(request, 'employees/filter_pickups.html')
 
 
 def confirmed_pickups(request, customer_id):
