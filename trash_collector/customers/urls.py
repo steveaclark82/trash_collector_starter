@@ -7,6 +7,14 @@ from . import views
 app_name = "customers"
 urlpatterns = [
     path('', views.index, name="index"),
+<<<<<<< HEAD
     path('create/', views.create, name="create"),
     path('edit/<int:option>/', views.edit, name="edit")
+=======
+    path('registercustomer/', views.create_customer, name='registercustomer'),
+    path('setpickup/', views.weekly_pickup, name="setpickup"),
+    path('pickup_suspension/', views.suspend_pickup, name="pickup_suspension"),
+    path('account_info/', views.account_info, name="account_info"),
+    path('onetime_pickup/', views.onetime_pickup, name="onetime_pickup")
+>>>>>>> parent of f73be49 (init)
 ]
