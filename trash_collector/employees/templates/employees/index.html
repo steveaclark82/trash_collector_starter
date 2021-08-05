@@ -1,31 +1,55 @@
 {% extends 'base.html' %}
 
-<div class="container text-center">
-{% block title %}{% block header %}  {% endblock %}{% endblock %}
-</div>
+{% block title %}Employee Home{% endblock %}
+{% block header %} <h1 class="display-1 text-center" id="title">Employee Home</h1> {% endblock %}
 
 {% block content %}
-  {% if user.is_authenticated %}
-    <h1>Hello {{logged_in_employee.name}}!</h1><h2>(username: {{ user.username }})</h2>
 
-<div class="container text-center">
-    <h1>These are your pick-ups for today!</h1>
-  {% for customer in employee_customers %}
-<div class="container-sm text-center border border-dark w-25 p-3">
-    <p>{{customer.name}} {{customer.address}} {{customer.zip_code}} {{customer.pickup_day}} ${{customer.account_balance}}
-    <div class="form-group">
-<form action="{% url 'employees:confirm_pickups' customer.id %}" method="post">
-    {% csrf_token %}
-    <p>Confirm pickup for {{customer.name}}</p>
-    <input type="submit" value="Confirm">
-</form>
-    </div>
-</div>
-</div>
-  {% endfor %}
+  {% if user.is_authenticated %}
+  <!-- <div class="container"> -->
+    <div class="row row-cols-auto d-flex justify-content-center">
+      <div class="col"></div>
+      <div class="col" id="custom-table">
+        <h1 class="display-3 text-center" id="subtitle">Hello, {{ user.username }}!</h1>
+        <table class="table table-striped table-hover table-light">
+          <caption style="color:whitesmoke;font-size:.75rem;">List of Customers</caption>
+          <thead>
+            <tr>
+              <th scope="col" >Today's Customers</th>
+              <th scope="col">Address</th>
+              <th scope="col"><!-- Confirm Pickup --></th>
+            </tr>
+          </thead>
+          <tbody class="employee-table-body">
+            {% for customer in todays_customers %}
+            <tr>
+              <td>{{customer.name}}</td>
+              <td>{{customer.address}}</td>
+              {% if customer.last_confirmed_pickup != today %}
+                <td>
+                      <button type="button" class="form-control confirm-pickup-btn" disabled>Confirm Pickup</button>
+               </td>
+              {% else %}
+                <td>
+                  <a href="{% url 'employees:confirmed_pickup' customer.id %}">
+                    <button type="button" class="form-control confirm-pickup-btn">Confirm Pickup</button>
+                  </a>
+                </td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="col"></div>
+      </div>
+  <!-- </div> -->
   {% else %}
+    <!-- <div class="container"> -->
     <p>You are at the employee index, but you are not logged in.</p>
     <a href="{% url 'login' %}">Log In</a>
     <a href="{% url 'accounts:register' %}">Sign Up</a>
-  {% endif %}
+    <!-- </div> -->
+    {% endif %}
+
 {% endblock %}

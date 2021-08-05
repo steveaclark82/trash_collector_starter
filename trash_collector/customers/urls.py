@@ -7,9 +7,6 @@ from . import views
 app_name = "customers"
 urlpatterns = [
     path('', views.index, name="index"),
-    path('new/', views.create, name="create"),
-    path('account_info/', views.customer_account,
-         name="customer_account"),
-    path('change_pickup/', views.change_pickup,
-         name="change_pickup"),
+    path('create/', views.create, name="create"),
+    path('edit/<int:option>/', views.edit, name="edit")
 ]

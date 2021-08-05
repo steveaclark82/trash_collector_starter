@@ -10,5 +10,3 @@ class Employees(models.Model):
     zip_code = models.IntegerField(default=00000, null=True)
     todays_customers = []
 
-    def __str__(self):
-        return self.name

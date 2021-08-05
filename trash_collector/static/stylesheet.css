@@ -83,7 +83,11 @@ label {
     color: #ccc;
     background-color: #2a2b2a;
     background-clip: padding-box;
+<<<<<<< HEAD
+    border: 0px solid #073562;
+=======
     border: 0px solid #ced4da;
+>>>>>>> parent of f73be49 (init)
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
