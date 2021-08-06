@@ -1,7 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.apps import apps
-from .models import Employees
 from datetime import date
 
 today = date.today()
@@ -9,22 +8,22 @@ the_current_day_of_week = today.strftime("%A")  # Monday, Tuesday, Wednesday, Th
 today = today.strftime("%Y-%m-%d")
 
 print(today)
-
-from django.urls import reverse
-
 # Create your views here.
 
 # TODO: Create a function for each path created in employees/urls.py. Each will need a template as well.
+from django.urls import reverse
+from .models import Employees
 
 
 def index(request):
+    # This line will get the Customer model from the other app, it can now be used to query the db
     Customer = apps.get_model('customers.Customer')
-    return render(request, 'employees/index.html')
     user = request.user
-    
     if not Employees.objects.filter(user_id=user.id).exists():
+        #  If user isn't in current Employee database, then create an employee with user information.
         return redirect('create/')
     else:
+        # Go into the home portal with user information found in Employee database.
         all_customers = Customer.objects.all()
         specific_employee = Employees.objects.get(user_id=user.id)
         zip_code_customers = []
@@ -91,7 +90,7 @@ def check_suspension(the_customer):
 def find_customers_by_day(request):
     user = request.user
     if request.method == 'POST':
-        option = request.POST['day of week']
+        option = request.POST['dayofweek']
         print(option)
         Customer = apps.get_model('customers.Customer')
         specific_employee = Employees.objects.get(user_id=user.id)
@@ -104,7 +103,7 @@ def find_customers_by_day(request):
         context = {
             'daily_customers': daily_customers
         }
-        return render(request, 'employees/filters_pickups.html', context)
+        return render(request, 'employees/filter_pickups.html', context)
 
     else:
         return render(request, 'employees/filter_pickups.html')
@@ -132,9 +131,4 @@ elif option == 'Wednesday':
 elif option == 'Thursday':
     daily_customers = zip_code_customers.filter(weekly_pickup_day='Thursday')
 elif option == 'Friday':
-<<<<<<< HEAD
     daily_customers = zip_code_customers.filter(weekly_pickup_day='Friday')"""
->>>>>>> 7293f05d874a558916faec5b3b3a09fc797a92d9
-=======
-    daily_customers = zip_code_customers.filter(weekly_pickup_day='Friday')"""
->>>>>>> parent of b50c532 (init)
