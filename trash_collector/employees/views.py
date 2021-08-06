@@ -1,6 +1,16 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.apps import apps
+from .models import Employees
+from datetime import date
+
+today = date.today()
+the_current_day_of_week = today.strftime("%A")  # Monday, Tuesday, Wednesday, Thursday, Friday
+today = today.strftime("%Y-%m-%d")
+
+print(today)
+
+from django.urls import reverse
 
 # Create your views here.
 
@@ -8,12 +18,10 @@ from django.apps import apps
 
 
 def index(request):
-    # This line will get the Customer model from the other app, it can now be used to query the db for Customers
     Customer = apps.get_model('customers.Customer')
-<<<<<<< HEAD
     return render(request, 'employees/index.html')
-=======
     user = request.user
+    
     if not Employees.objects.filter(user_id=user.id).exists():
         return redirect('create/')
     else:
@@ -96,7 +104,7 @@ def find_customers_by_day(request):
         context = {
             'daily_customers': daily_customers
         }
-        return render(request, 'employees/filter_pickups.html', context)
+        return render(request, 'employees/filters_pickups.html', context)
 
     else:
         return render(request, 'employees/filter_pickups.html')
@@ -124,5 +132,9 @@ elif option == 'Wednesday':
 elif option == 'Thursday':
     daily_customers = zip_code_customers.filter(weekly_pickup_day='Thursday')
 elif option == 'Friday':
+<<<<<<< HEAD
     daily_customers = zip_code_customers.filter(weekly_pickup_day='Friday')"""
 >>>>>>> 7293f05d874a558916faec5b3b3a09fc797a92d9
+=======
+    daily_customers = zip_code_customers.filter(weekly_pickup_day='Friday')"""
+>>>>>>> parent of b50c532 (init)
